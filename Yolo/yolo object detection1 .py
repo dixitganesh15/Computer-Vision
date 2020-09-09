@@ -31,7 +31,7 @@ img =cv2.resize(img,(width,height))
 # In[5]:
 
 
-net = cv2.dnn.readNet('yolov3-tiny.weights','yolov3-tiny.cfg')
+net = cv2.dnn.readNet('yolov3-608.weights','yolov3-608.cfg')
 
 
 # In[6]:
@@ -102,7 +102,7 @@ for each in layerOutputs:
         class_id = np.argmax(scores)
         confidence = scores[class_id]
         
-        if confidence > 0.4 :
+        if confidence > 0.5:
             center_x = int(detection[0] * width) 
             center_y = int(detection[1] * height)
             w = int(detection[2] * width)
@@ -116,7 +116,7 @@ for each in layerOutputs:
             class_ids.append(class_id)
 print(len(boxes))
             
-indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.4,0.4)
+indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5,0.4)
 print(indexes.flatten())
 
 font = cv2.FONT_HERSHEY_PLAIN
@@ -140,4 +140,10 @@ for i in indexes.flatten():
 cv2.imshow("Yolo Image", img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+
+# In[16]:
+
+
+cv2.imwrite('Object detected.jpg',img)
 
